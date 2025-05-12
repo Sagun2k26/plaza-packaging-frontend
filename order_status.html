@@ -142,7 +142,7 @@
 
     async function loadOrders() {
       try {
-        const response = await fetch('http://localhost:3000/api/orders');
+        const response = await fetch('https://plaza-packaging-backend.onrender.com/api/orders');
         const result = await response.json();
         const orderSelect = document.getElementById('orderSelect');
         orderSelect.innerHTML = '';
@@ -166,7 +166,7 @@
     async function loadOrderDetails() {
       const orderId = document.getElementById('orderSelect').value;
       try {
-        const response = await fetch(`http://localhost:3000/api/status/${orderId}`);
+        const response = await fetch(`https://plaza-packaging-backend.onrender.com/api/status/${orderId}`);
         const result = await response.json();
 
         if (!response.ok) {
@@ -205,11 +205,6 @@
           if (step.status === 'Completed') completedSteps++;
           tableBody.appendChild(row);
         });
-
-        if (completedSteps === stepNames.length) {
-          document.getElementById('orderDetails').innerHTML += `<h3 style="color: green;">Process Completed</h3>`;
-        }
-
       } catch (error) {
         alert('Error loading order details');
       }
