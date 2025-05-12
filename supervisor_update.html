@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Plaza Packaging – Supervisor Update</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(160deg, #2d6a4f, #95d5b2);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #eef;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .form-container {
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .order-details {
+      margin: 1rem 0;
+      padding: 0.5rem;
+      background: #f0f0f0;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 500;
+      color: #2d6a4f;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.8rem;
+      background: #2d6a4f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #1b4332;
+      transform: translateY(-2px);
+    }
+
+    .back-btn {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      background: #fff;
+      color: #2d6a4f;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .back-btn:hover {
+      background: #e6f7ff;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Supervisor Update</h1>
+  <p class="subtitle">Update the progress of any ongoing production step</p>
+
+  <div class="form-container">
+    <label for="orderSelect">Select Order</label>
+    <select id="orderSelect" onchange="loadOrderDetails()" required>
+      <option value="">Loading orders...</option>
+    </select>
+
+    <div id="selectedOrderInfo" class="order-details">Select an order to view details.</div>
+  </div>
+
+  <div class="form-container">
+    <label for="stepId">Step Number (1–10)</label>
+    <input type="number" id="stepId" min="1" max="10" required />
+
+    <label for="status">Status</label>
+    <select id="status" required>
+      <option value="Not Started">Not Started</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
+
+    <label for="supervisorName">Supervisor Name</label>
+    <input type="text" id="supervisorName" placeholder="Enter Your Name" required />
+
+    <label for="operationDate">Date of Operation</label>
+    <input type="date" id="operationDate" required />
+
+    <label for="startTime">Start Time</label>
+    <input type="time" id="startTime" required />
+
+    <label for="endTime">End Time</label>
+    <input type="time" id="endTime" required />
+
+    <button onclick="submitUpdate()">Submit Update</button>
+  </div>
+
+  <a href="index.html" class="back-btn">← Back to Main</a>
+
+  <script>
+    let selectedOrderId = null;
+
+    async function loadOrders() {
+      try {
+        const response = await fetch('http://localhost:3000/api/orders');
+        const result = await response.json();
+        const orderSelect = document.getElementById('orderSelect');
+        orderSelect.innerHTML = '';
+
+        result.data.forEach(order => {
+          const completedSteps = order.steps.filter(step => step.status === 'Completed').length;
+          if (completedSteps < 10) {  // Show only if not all 10 steps are completed
+            const option = document.createElement('option');
+            option.value = order.order_id;
+            option.textContent = `Order ID: ${order.order_id} - ${order.clientCompanyName}`;
+            orderSelect.appendChild(option);
+          }
+        });
+
+        if (orderSelect.options.length === 0) {
+          orderSelect.innerHTML = '<option>No ongoing orders available</option>';
+        }
+      } catch (error) {
+        alert('Error loading orders');
+      }
+    }
+
+    function loadOrderDetails() {
+      const orderSelect = document.getElementById('orderSelect');
+      selectedOrderId = orderSelect.value;
+      const selectedText = orderSelect.options[orderSelect.selectedIndex].text;
+      document.getElementById('selectedOrderInfo').innerText = `Selected: ${selectedText}`;
+    }
+
+    async function submitUpdate() {
+      const stepId = document.getElementById('stepId').value;
+      const status = document.getElementById('status').value;
+      const supervisorName = document.getElementById('supervisorName').value;
+      const operationDate = document.getElementById('operationDate').value;
+      const startTime = document.getElementById('startTime').value;
+      const endTime = document.getElementById('endTime').value;
+
+      const updateData = {
+        order_id: selectedOrderId,
+        step: { stepId, status, supervisorName, operationDate, startTime, endTime }
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/api/production', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+        const result = await response.json();
+        alert(result.message);
+      } catch (error) {
+        alert('Error submitting update');
+      }
+    }
+
+    window.onload = loadOrders;
+  </script>
+
+</body>
+</html>

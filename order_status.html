@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Plaza Packaging – Order Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(160deg, #2d6a4f, #95d5b2);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #eef;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      text-align: center;
+    }
+
+    .order-details, .form-container {
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      margin-bottom: 1.5rem;
+      text-align: left;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .table-container {
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      max-width: 1000px;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: center;
+      border: 1px solid #ccc;
+      color: #333;
+    }
+
+    th {
+      background: #f0f0f0;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+
+    tr:hover td {
+      background: #e6f7ff;
+    }
+
+    .back-btn {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      background: #fff;
+      color: #2d6a4f;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .back-btn:hover {
+      background: #e6f7ff;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Order Status</h1>
+  <p class="subtitle">Select an order to view its status</p>
+
+  <div class="form-container">
+    <label for="orderSelect">Select Order</label>
+    <select id="orderSelect" onchange="loadOrderDetails()" required>
+      <option value="">Loading orders...</option>
+    </select>
+  </div>
+
+  <div class="order-details" id="orderDetails">Select an order to view details.</div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Step No.</th>
+          <th>Step Name</th>
+          <th>Status</th>
+          <th>Supervisor</th>
+          <th>Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+      </thead>
+      <tbody id="statusTableBody"></tbody>
+    </table>
+  </div>
+
+  <a href="index.html" class="back-btn">← Back to Main</a>
+
+  <script>
+    const stepNames = [
+      'Sheet Cutter', 'Corrugation Machine', 'Pasting Machine',
+      'Printing Machine', 'Creasing Machine', 'Slot Machine',
+      'Punching Machine', 'Stitching Machine', 'Tying Machine',
+      'Finished Goods'
+    ];
+
+    async function loadOrders() {
+      try {
+        const response = await fetch('http://localhost:3000/api/orders');
+        const result = await response.json();
+        const orderSelect = document.getElementById('orderSelect');
+        orderSelect.innerHTML = '';
+
+        if (result.data.length === 0) {
+          orderSelect.innerHTML = '<option>No ongoing orders available</option>';
+          return;
+        }
+
+        result.data.forEach(order => {
+          const option = document.createElement('option');
+          option.value = order.order_id;
+          option.textContent = `Order ID: ${order.order_id} - ${order.clientCompanyName}`;
+          orderSelect.appendChild(option);
+        });
+      } catch (error) {
+        alert('Error loading orders');
+      }
+    }
+
+    async function loadOrderDetails() {
+      const orderId = document.getElementById('orderSelect').value;
+      try {
+        const response = await fetch(`http://localhost:3000/api/status/${orderId}`);
+        const result = await response.json();
+
+        if (!response.ok) {
+          alert(result.message || 'Error fetching order status');
+          return;
+        }
+
+        const order = result;
+        const tableBody = document.getElementById('statusTableBody');
+        let completedSteps = 0;
+
+        const details = `
+          <p><strong>Client Company:</strong> ${order.clientCompanyName}</p>
+          <p><strong>Particulars:</strong> ${order.particulars}</p>
+          <p><strong>Raw Material:</strong> ${order.rawMaterial}</p>
+          <p><strong>Size:</strong> ${order.size}</p>
+          <p><strong>GSM:</strong> ${order.gsm}</p>
+          <p><strong>Ply:</strong> ${order.ply}</p>
+          <p><strong>Quantity:</strong> ${order.quantity}</p>
+          <p><strong>Status:</strong> ${order.status}</p>
+        `;
+        document.getElementById('orderDetails').innerHTML = details;
+
+        tableBody.innerHTML = '';
+        order.steps.slice(0, 10).forEach((step, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${stepNames[step.stepId - 1]}</td>
+            <td>${step.status || 'Pending'}</td>
+            <td>${step.supervisorName || '-'}</td>
+            <td>${step.operationDate || '-'}</td>
+            <td>${step.startTime || '-'}</td>
+            <td>${step.endTime || '-'}</td>
+          `;
+          if (step.status === 'Completed') completedSteps++;
+          tableBody.appendChild(row);
+        });
+
+        if (completedSteps === stepNames.length) {
+          document.getElementById('orderDetails').innerHTML += `<h3 style="color: green;">Process Completed</h3>`;
+        }
+
+      } catch (error) {
+        alert('Error loading order details');
+      }
+    }
+
+    window.onload = loadOrders;
+  </script>
+
+</body>
+</html>

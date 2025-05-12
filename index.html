@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Plaza Packaging</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(160deg, #2d6a4f, #95d5b2);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      line-height: 1.1;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+    }
+    .hero p {
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+
+    /* Vertical Container */
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 2rem;
+    }
+
+    /* Box Styles */
+    .box {
+      background: rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: block;
+    }
+    .box:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+    }
+    .box h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .box p {
+      font-size: 1rem;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    /* Responsive for Small Screens */
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .box {
+        padding: 1.2rem;
+        font-size: 0.9rem;
+      }
+      .container {
+        gap: 1rem;
+      }
+    }
+
+    /* Landscape Orientation Handling */
+    @media (orientation: landscape) and (max-width: 900px) {
+      body {
+        padding: 1rem;
+      }
+      .hero {
+        margin-bottom: 1.5rem;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .container {
+        max-width: 600px;
+        gap: 1rem;
+      }
+      .box {
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Touch-Friendly Buttons */
+    .box {
+      touch-action: manipulation;
+      margin: 0.5rem;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>Welcome to<br>Plaza Packaging</h1>
+    <p></p>
+  </div>
+
+  <div class="container">
+    <a class="box" href="prev_orders.html">
+      <h2>📦 Previous Orders</h2>
+      <p>Browse all past orders and view their details.</p>
+    </a>
+
+    <a class="box" href="new_order.html">
+      <h2>🆕 New Order</h2>
+      <p>Create and submit a brand-new packaging order.</p>
+    </a>
+
+    <a class="box" href="order_status.html">
+      <h2>🔍 Order Status</h2>
+      <p>Track the progress of orders through each production step.</p>
+    </a>
+
+    <a class="box" href="supervisor_update.html">
+      <h2>✏️ Update Status</h2>
+      <p>Supervisors: record the date, time & status of each step.</p>
+    </a>
+  </div>
+
+</body>
+</html>

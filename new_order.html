@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Plaza Packaging – New Order</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(160deg, #2d6a4f, #95d5b2);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    /* Header */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    p.subtitle {
+      font-size: 1rem;
+      color: #eef;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      text-align: center;
+    }
+
+    /* Form Container */
+    .form-container {
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Form Elements */
+    .form-container label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 500;
+      color: #2d6a4f;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .form-container button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.8rem;
+      background: #2d6a4f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .form-container button:hover {
+      background: #1b4332;
+      transform: translateY(-2px);
+    }
+
+    /* Back Button */
+    .back-btn {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      background: #fff;
+      color: #2d6a4f;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .form-container { padding: 1.5rem; }
+      .form-container input, .form-container button {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Landscape Orientation */
+    @media (orientation: landscape) and (max-width: 900px) {
+      h1 { font-size: 2rem; }
+      .form-container {
+        padding: 1.2rem;
+        max-width: 80%;
+      }
+      .form-container input, .form-container button {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+      }
+      .back-btn {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>New Order</h1>
+  <p class="subtitle">Fill in the details to create a new packaging order</p>
+
+  <div class="form-container">
+    <form id="orderForm">
+      <label for="clientCompanyName">Client Company Name</label>
+      <input type="text" id="clientCompanyName" name="clientCompanyName" required />
+
+      <label for="particulars">Particulars</label>
+      <input type="text" id="particulars" name="particulars" required />
+
+      <label for="rawMaterial">Raw Material</label>
+      <input type="text" id="rawMaterial" name="rawMaterial" required />
+
+      <label for="size">Size</label>
+      <input type="text" id="size" name="size" required />
+
+      <label for="gsm">GSM</label>
+      <input type="number" id="gsm" name="gsm" required />
+
+      <label for="ply">Ply</label>
+      <input type="number" id="ply" name="ply" required />
+
+      <label for="quantity">Quantity</label>
+      <input type="number" id="quantity" name="quantity" required />
+
+      <button type="submit">Submit Order</button>
+    </form>
+  </div>
+
+  <a href="index.html" class="back-btn">← Back to Main</a>
+
+  <script>
+    document.getElementById('orderForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const orderData = {
+        order_id: Date.now().toString(),
+        clientCompanyName: document.getElementById('clientCompanyName').value,
+        particulars: document.getElementById('particulars').value,
+        rawMaterial: document.getElementById('rawMaterial').value,
+        size: document.getElementById('size').value,
+        gsm: parseInt(document.getElementById('gsm').value),
+        ply: parseInt(document.getElementById('ply').value),
+        quantity: parseInt(document.getElementById('quantity').value)
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message);
+        alert(result.message);
+      } catch (error) {
+        alert('Error submitting order: ' + error.message);
+        console.error(error);
+      }
+    });
+  </script>
+
+</body>
+</html>
