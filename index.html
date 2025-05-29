@@ -2,155 +2,455 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plaza Packaging</title>
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Base */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(160deg, #2d6a4f, #95d5b2);
-      min-height: 100vh;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Hero Section */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: 
+        radial-gradient(ellipse at top left, rgba(230, 244, 248, 0.8) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(160, 196, 212, 0.6) 0%, transparent 50%),
+        linear-gradient(135deg, #e6f4f8 0%, #d0e3ed 20%, #b8d4e1 40%, #a0c4d4 60%, #88b8c8 80%, #7090b4 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Enhanced paper texture overlay with depth */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(85, 115, 139, 0.12) 1px, transparent 1px),
+        radial-gradient(circle at 75% 75%, rgba(106, 136, 160, 0.08) 1px, transparent 1px),
+        radial-gradient(circle at 50% 10%, rgba(126, 156, 180, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at 10% 90%, rgba(85, 115, 139, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, transparent 49%, rgba(85, 115, 139, 0.02) 50%, transparent 51%),
+        linear-gradient(0deg, transparent 49%, rgba(106, 136, 160, 0.02) 50%, transparent 51%);
+      background-size: 60px 60px, 80px 80px, 100px 100px, 120px 120px, 40px 40px, 40px 40px;
+      z-index: -1;
+      opacity: 0.8;
+      animation: textureShift 20s ease-in-out infinite;
+    }
+
+    @keyframes textureShift {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Subtle floating paper elements */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .paper-element {
+      position: absolute;
+      background: linear-gradient(135deg, rgba(85, 115, 139, 0.18), rgba(106, 136, 160, 0.12));
+      border-radius: 4px;
+      animation: paperFloat 15s ease-in-out infinite;
+      box-shadow: 
+        0 4px 12px rgba(85, 115, 139, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(85, 115, 139, 0.1);
+    }
+
+    .paper-element:nth-child(1) { 
+      width: 40px; height: 30px; 
+      top: 20%; left: 10%; 
+      animation-delay: 0s; 
+      animation-duration: 10s;
+    }
+    .paper-element:nth-child(2) { 
+      width: 25px; height: 35px; 
+      top: 60%; left: 80%; 
+      animation-delay: 2s; 
+      animation-duration: 14s;
+    }
+    .paper-element:nth-child(3) { 
+      width: 35px; height: 25px; 
+      top: 80%; left: 20%; 
+      animation-delay: 4s; 
+      animation-duration: 16s;
+    }
+    .paper-element:nth-child(4) { 
+      width: 30px; height: 40px; 
+      top: 30%; left: 70%; 
+      animation-delay: 1s; 
+      animation-duration: 12s;
+    }
+    .paper-element:nth-child(5) { 
+      width: 45px; height: 20px; 
+      top: 70%; left: 50%; 
+      animation-delay: 3s; 
+      animation-duration: 13s;
+    }
+
+    @keyframes paperFloat {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.3; 
+      }
+      25% { 
+        transform: translateY(-15px) rotate(2deg); 
+        opacity: 0.5; 
+      }
+      50% { 
+        transform: translateY(-25px) rotate(-1deg); 
+        opacity: 0.7; 
+      }
+      75% { 
+        transform: translateY(-10px) rotate(1deg); 
+        opacity: 0.4; 
+      }
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
     .hero {
       text-align: center;
       margin-bottom: 3rem;
+      padding: 0rem 0;
     }
+
     .hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      line-height: 1.1;
-      text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+      font-family: 'Merriweather', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+      margin-top: 2.5rem;
+      text-shadow: 0 4px 8px rgba(37, 99, 235, 0.15);
+      animation: slideInDown 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      letter-spacing: -0.02em;
+      position: relative;
     }
+
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
     .hero p {
-      font-size: 1.1rem;
-      margin-top: 0.5rem;
-      opacity: 0.9;
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      font-weight: 400;
+      color: #1e40af;
+      margin-top: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+      animation: slideInUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
     }
 
-    /* Vertical Container */
     .container {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    /* Box Styles */
     .box {
-      background: rgba(255,255,255,0.15);
-      border-radius: 12px;
-      padding: 1.5rem;
+      background: 
+        linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+      border: 2px solid rgba(59, 130, 246, 0.15);
+      border-radius: 20px;
+      padding: 1.2rem 2.5rem;
       text-align: center;
       text-decoration: none;
-      color: #fff;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: block;
+      color: #1e40af;
+      box-shadow: 
+        0 12px 40px rgba(59, 130, 246, 0.12),
+        0 4px 12px rgba(59, 130, 246, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 0 rgba(59, 130, 246, 0.05);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+      backdrop-filter: blur(20px);
     }
+
+    .box:nth-child(1) { animation-delay: 0.1s; }
+    .box:nth-child(2) { animation-delay: 0.2s; }
+    .box:nth-child(3) { animation-delay: 0.3s; }
+    .box:nth-child(4) { animation-delay: 0.4s; }
+
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(96, 165, 250, 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .box:hover::before {
+      opacity: 1;
+    }
+
     .box:hover {
-      transform: translateY(-6px) scale(1.03);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      transform: translateY(-8px);
+      box-shadow: 
+        0 16px 48px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      border-color: rgba(59, 130, 246, 0.3);
     }
+
+    .icon-container {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        0 6px 20px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .box:hover .icon-container {
+      transform: scale(1.1);
+      box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      filter: brightness(0) invert(1);
+    }
+
     .box h2 {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
+      font-family: 'Merriweather', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #1e40af;
+      letter-spacing: -0.01em;
+      transition: color 0.3s ease;
     }
+
+    .box:hover h2 {
+      color: #1e3a8a;
+    }
+
     .box p {
-      font-size: 1rem;
-      line-height: 1.4;
-      opacity: 0.9;
+      font-size: 0.95rem;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #3730a3;
+      transition: color 0.3s ease;
     }
 
-    /* Responsive for Small Screens */
-    @media (max-width: 600px) {
-      body {
-        padding: 1rem;
+    .box:hover p {
+      color: #1e40af;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 3rem 0;
+      color: #3b82f6;
+      font-size: 0.9rem;
+      animation: fadeIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s both;
+      font-weight: 300;
+      border-top: 1px solid rgba(59, 130, 246, 0.2);
+      margin-top: 2rem;
+    }
+
+    @keyframes slideInDown {
+      from {
+        transform: translateY(-40px);
+        opacity: 0;
       }
-      .hero h1 {
-        font-size: 2.2rem;
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
-      .hero p {
-        font-size: 1rem;
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
       }
-      .box {
-        padding: 1.2rem;
-        font-size: 0.9rem;
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
       .container {
-        gap: 1rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+      
+      .box {
+        padding: 2rem 1.5rem;
+      }
+      
+      .icon-container {
+        width: 70px;
+        height: 70px;
+      }
+      
+      .icon {
+        width: 35px;
+        height: 35px;
       }
     }
 
-    /* Landscape Orientation Handling */
-    @media (orientation: landscape) and (max-width: 900px) {
-      body {
+    @media (max-width: 580px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-container {
         padding: 1rem;
       }
+
       .hero {
-        margin-bottom: 1.5rem;
+        padding: 2rem 0;
       }
-      .hero h1 {
-        font-size: 2.5rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .paper-element,
+      .hero h1,
+      .hero p,
+      .box,
+      .footer {
+        animation: none;
       }
-      .container {
-        max-width: 600px;
-        gap: 1rem;
-      }
+
       .box {
-        padding: 1rem;
-        font-size: 0.9rem;
+        transition: none;
+      }
+
+      .box:hover {
+        transform: none;
       }
     }
-
-    /* Touch-Friendly Buttons */
-    .box {
-      touch-action: manipulation;
-      margin: 0.5rem;
-    }
-
   </style>
 </head>
 <body>
-
-  <div class="hero">
-    <h1>Welcome to<br>Plaza Packaging</h1>
-    <p></p>
+  <div class="bg-animation">
+    <div class="paper-element"></div>
+    <div class="paper-element"></div>
+    <div class="paper-element"></div>
+    <div class="paper-element"></div>
+    <div class="paper-element"></div>
   </div>
 
-  <div class="container">
-    <a class="box" href="prev_orders.html">
-      <h2>📦 Previous Orders</h2>
-      <p>Browse all past orders and view their details.</p>
-    </a>
+  <div class="main-container">
+    <div class="hero">
+      <h1>Plaza Packaging</h1>
+      <p>Professional paper packaging solutions with streamlined order management</p>
+    </div>
 
-    <a class="box" href="new_order.html">
-      <h2>🆕 New Order</h2>
-      <p>Create and submit a brand-new packaging order.</p>
-    </a>
+    <div class="container">
+      <a class="box" href="prev_orders.html">
+        <div class="icon-container">
+          <img src="https://img.icons8.com/ios-filled/64/ffffff/package.png" alt="Previous Orders" class="icon" />
+        </div>
+        <h2>Previous Order</h2>
+        <p>Access comprehensive records of all previous packaging orders with detailed specifications and delivery tracking.</p>
+      </a>
 
-    <a class="box" href="order_status.html">
-      <h2>🔍 Order Status</h2>
-      <p>Track the progress of orders through each production step.</p>
-    </a>
+      <a class="box" href="new_order.html">
+        <div class="icon-container">
+          <img src="https://img.icons8.com/ios-filled/64/ffffff/plus-math.png" alt="New Order" class="icon" />
+        </div>
+        <h2>New Order</h2>
+        <p>Submit new packaging requirements with custom specifications, quantities, and delivery preferences.</p>
+      </a>
 
-    <a class="box" href="supervisor_update.html">
-      <h2>✏️ Update Status</h2>
-      <p>Supervisors: record the date, time & status of each step.</p>
-    </a>
+      <a class="box" href="order_status.html">
+        <div class="icon-container">
+          <img src="https://img.icons8.com/ios-filled/64/ffffff/search--v1.png" alt="Order Status" class="icon" />
+        </div>
+        <h2>Track Progress</h2>
+        <p>Monitor real-time production status from design approval through manufacturing to final delivery.</p>
+      </a>
+
+      <a class="box" href="supervisor_update.html">
+        <div class="icon-container">
+          <img src="https://img.icons8.com/ios-filled/64/ffffff/edit.png" alt="Update Status" class="icon" />
+        </div>
+        <h2>Update Status</h2>
+        <p>Supervisor tools for updating production status, quality control checkpoints, and workflow coordination.</p>
+      </a>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 Plaza Packaging Solutions. Internal Management Portal.</p>
+    </div>
   </div>
-
 </body>
 </html>
